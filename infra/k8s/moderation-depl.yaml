@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderation-depl
+spec: #como debe comportarse
+  replicas: 1 # indica el numero de pods que se quieren crear corriendo una imagen
+  selector:
+    matchLabels:
+      app: moderation # buscar todos los pods creados con el nombre moderation
+  template: # especifica la configuracion exacta del pod que el deployment hara
+    metadata:
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: cesca2092/moderation # si se deja asi es como si estuviera como latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  # type: NodePort  - Por defecto es ClusterIp
+  selector:
+    app: moderation # find all pods named moderation and expose them
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 4003 # Nodeport
+      targetPort: 4003 # Port from application

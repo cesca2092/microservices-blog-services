@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec: #como debe comportarse
+  replicas: 1 # indica el numero de pods que se quieren crear corriendo una imagen
+  selector:
+    matchLabels:
+      app: posts # buscar todos los posts creados con el nombre posts
+  template: # especifica la configuracion exacta del pod que el deployment hara
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: cesca2092/posts # si se deja asi es como si estuviera como latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  selector:
+    app: posts # find all pods named posts and expose them
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000 # External port
+      targetPort: 4000 # Port from application

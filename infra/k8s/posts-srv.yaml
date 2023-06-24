@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  type: NodePort # - Por defecto es ClusterIp
+  selector:
+    app: posts # find all pods named posts and expose them
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000 # Nodeport
+      targetPort: 4000 # Port from application

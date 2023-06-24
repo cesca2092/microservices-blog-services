@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec: #como debe comportarse
+  replicas: 1 # indica el numero de pods que se quieren crear corriendo una imagen
+  selector:
+    matchLabels:
+      app: query # buscar todos los pods creados con el nombre query
+  template: # especifica la configuracion exacta del pod que el deployment hara
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: cesca2092/query # si se deja asi es como si estuviera como latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  # type: NodePort  - Por defecto es ClusterIp
+  selector:
+    app: query # find all pods named query and expose them
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002 # Nodeport
+      targetPort: 4002 # Port from application

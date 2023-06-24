@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec: #como debe comportarse
+  replicas: 1 # indica el numero de pods que se quieren crear corriendo una imagen
+  selector:
+    matchLabels:
+      app: client # buscar todos los pods creados con el nombre client
+  template: # especifica la configuracion exacta del pod que el deployment hara
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: cesca2092/client # si se deja asi es como si estuviera como latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  # type: NodePort  - Por defecto es ClusterIp
+  selector:
+    app: client # find all pods named client and expose them
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000 # Nodeport
+      targetPort: 3000 # Port from application

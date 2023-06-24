@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-bus-depl
+spec: #como debe comportarse
+  replicas: 1 # indica el numero de pods que se quieren crear corriendo una imagen
+  selector:
+    matchLabels:
+      app: event-bus # buscar todos los pods creados con el nombre event-bus
+  template: # especifica la configuracion exacta del pod que el deployment hara
+    metadata:
+      labels:
+        app: event-bus
+    spec:
+      containers:
+        - name: event-bus
+          image: cesca2092/event-bus # si se deja asi es como si estuviera como latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec:
+  # type: NodePort  - Por defecto es ClusterIp
+  selector:
+    app: event-bus # find all pods named event-bus and expose them
+  ports:
+    - name: event-bus
+      protocol: TCP
+      port: 4005 # Nodeport
+      targetPort: 4005 # Port from application
