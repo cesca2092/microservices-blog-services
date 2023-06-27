@@ -66,5 +66,12 @@ app.listen(4002, async () => {
 
   } catch (error) {
     console.log("Error sincronizando");
+    if (error.response) {
+      console.log(error.response);
+    } else if (error.request) {
+      console.log(error.request);
+    } else {
+      console.log(error.message);
+    }
   }
 });
